@@ -138,6 +138,9 @@ var interval = setInterval(function(){
 如果你不确定答案的话，你可以把**后面的这几行代码删除，看看运行之后的效果：** 
 
 ```javascript
+// 提交
+$("#submitBtn").click(); 
+
 setInterval(function(){
   $(".layui-layer-btn0").click(); // 确定/关闭
 }, 10);
