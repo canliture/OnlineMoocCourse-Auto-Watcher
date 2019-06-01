@@ -149,6 +149,31 @@ setInterval(function(){
 
 
 
+__添加一些简单的操作：将下面的代码复制到看视频的页面的控制台下，回车使其生效。此时，我们就能够按一下回车就打开一节课后作业的页面。所以现在我们要做的操作就是：回车+F12+(Ctr+v粘贴)+回车 + ....(循环往复...)__
+
+__需要注意的是，这里是从第一个题目开始模拟点击下一个课后作业的。总的题目数大概是131个左右。5分钟内应该能完成所有的题目。__
+
+```javascript
+// 按回车就打开下一个题目
+(function(){
+	var homework = $("a[onClick$=',1)']");
+	var iterator = 0;
+	$(document).keydown(function(event){
+　　　　if(event.keyCode == 13){
+			console.log("iterator: " + iterator);
+			homework.get(iterator).click();
+			if(iterator + 1 >= homework.length){
+				iterator = 0;
+			} else {
+				iterator++;
+			}
+　　　　}
+　　});
+})();
+```
+
+
+
 **下面是很重要的，章节测试题了，一定要慎重提交代码，别弄串代码了，否则可能会不及格，因为章节测试分比重很大！**
 
 
