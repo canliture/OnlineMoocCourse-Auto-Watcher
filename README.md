@@ -1,7 +1,15 @@
 # OnlineMoocCourse-Auto-Watcher
+
+
+- **2019.6.6 增加Java程序辅助挂机，手动的地方只有3~5分钟**
+
+[TOC]
+
 ## 说明
 
 按理来说，网站后缀为**hunbys.com** 的网课，都能按照这个方法来刷。这里**仅仅以湖南创业网课** 为一个刷网课例子。
+
+
 
 ## 1. 提示：
 
@@ -194,3 +202,136 @@ setInterval(function(){
 }, 1000);
 ```
 
+## 4. java程序辅助刷题（课后习题）
+
+**说明：这里仅仅使用Java程序来帮助刷课后习题，至于章节测试题，还是谨慎点好，题目也不多，没必要用程序来自动刷，按照上面的方法手动复制粘贴代码填写答案即可。**
+
+
+
+我们发现，自己复制粘贴代码来自动填写课后习题仍然是比较耗我们的时间（因为课后习题的数量是相当多的）。所以这里我们借助 **Java桌面客户端程序** 来帮助我们挂机刷题：也就是让程序来帮我们刷题。
+
+
+
+首先我们理一下思路，我们手动复制粘贴代码来填写课后习题的步骤是什么？
+
+**首先打开一节课后习题，然后按F12，粘贴我们的代码回车。然后重复此操作。**
+
+现在我们要利用Chrome浏览器控制台的一个小技巧：**按方向键↑能够直接重新显示上一次我们运行的代码。**
+
+现在我们的步骤就是：
+
+**打开一节课后习题，然后按F12，按↑，回车。然后反复此操作。**
+
+现在我们的行为越来越简单，并且越来越能够被机器所替代了。
+
+<br/>
+
+下面是我们的程序完整实现。首先我们要保证控制台的设置：
+
+![](./images/ConfigConsole.png)
+
+然后我们在视频播放页网页的 控制台中 输入下面的代码：
+
+```js
+// 保证按按一下回车就能够打开下一节课后作业
+(function(){
+	var homework = $("a[onClick$=',1)']");
+	var iterator = 0;
+	$(document).keydown(function(event){
+　　　　if(event.keyCode == 13){
+			console.log("iterator: " + iterator);
+			homework.get(iterator).click();
+			if(iterator + 1 >= homework.length){
+				iterator = 0;
+			} else {
+				iterator++;
+			}
+　　　　}
+　　});
+})();
+
+// 先把我们的运行代码输进去，以便后续按↑的时候，找到的就是这段代码
+(function(){
+	// 对选择题/判断题进行选择
+	var radios = document.getElementsByClassName("radioAndValue");
+	for(var i = 0 ; i < radios.length ; i++){
+		var parentNode = radios[i].parentNode;
+		parentNode.getElementsByTagName("i")[0].click();
+	}
+
+	// 对多选题进行选择
+	var checkboxs = document.getElementsByClassName("bg checkbox");
+	for(var i = 0 ; i < checkboxs.length ; i++){
+		var j = (i+1)%4;
+		if( j == 1 || j == 2 ) {
+			checkboxs[i].click();
+		}
+	}
+
+	// 对填空题进行填空
+	var cardText = document.getElementsByClassName("text cardText");
+	for(var i = 0 ; i < cardText.length ; i++){
+		cardText[i].setAttribute("value", "创业" + (i+1));
+	}
+	// 对简答题进行选择
+	var textArea = document.getElementsByClassName("cardTextArea");
+	for(var i = 0 ; i < textArea.length ; i++){
+		textArea[i].focus();
+		textArea[i].innerHTML = "创业" + (i+1);
+	}
+	
+	// 提交
+	$("#submitBtn").click(); 
+	
+	setInterval(function(){
+		$(".layui-layer-btn0").click(); // 确定/关闭
+	}, 10);
+})();
+
+```
+
+下面就运行我们的Java程序就可以了，下面是Java程序代码，请自行编译运行吧。
+
+记住，运行后**请立刻让自己的鼠标点击一下网课视频播放网页界面，以便程序的后续操作能够直接作用在网页上。**
+
+**程序非常简单，仅仅是模拟我们的手动操作而已。**
+
+```java
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
+public class Simulator {
+
+    public static void main(String[] args) throws AWTException, InterruptedException {
+
+        for(int i = 0 ;  ; i ++){ 
+            //初始化robot
+            Robot robot = new Robot();
+
+            // 1. 按回车
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            Thread.sleep(100);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+
+            // 2. 按F12
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_F12);
+            Thread.sleep(100);
+            robot.keyRelease(KeyEvent.VK_F12);
+
+            // 3. 按↑
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_UP);
+            Thread.sleep(100);
+            robot.keyRelease(KeyEvent.VK_UP);
+
+            // 4. 按回车
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            Thread.sleep(100);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+        }
+    }
+}
+```
