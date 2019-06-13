@@ -77,9 +77,7 @@ var interval = setInterval(function(){
 			    || $("a[canbelearn=true]").last();
 		console.log(next);
 		next.click();
-	} else {
-        video.play();
-	}}, 1000);},});
+	}video.play();}, 1000);},});
 ```
 
 ### 2.2 运行代码和一些注意事项
