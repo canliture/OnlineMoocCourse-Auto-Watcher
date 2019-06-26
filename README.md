@@ -55,6 +55,7 @@ Not Really!!
 
 ```javascript
 var rate = 2;
+var interval = null;
 layer.open({
     type: 1,//info
     title: "<b style='color:red'>温馨提示</b>",
@@ -68,7 +69,7 @@ layer.open({
         layer.close(index);
       
 clearInterval(interval);
-var interval = setInterval(function(){
+interval = setInterval(function(){
 	layer.closeAll();
 	video.volume = 0;
 	video.playbackRate = rate;
